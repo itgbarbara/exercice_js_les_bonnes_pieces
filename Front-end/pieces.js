@@ -18,7 +18,7 @@ const categorieElement = document.createElement("p") // On crée une balise html
 categorieElement.innerText = article.categorie ?? "(aucune catégorie)" // On y ajoute la catégorie de l'article
 
 const descriptionElement = document.createElement("p") // On crée une balise html <p> (paragraphe)
-descriptionElement.innerText = article.description ?? "(Pas de description pour le moment)" // On y ajoute la description de l'article
+descriptionElement.innerText = article.description ?? "Pas de description pour le moment" // On y ajoute la description de l'article
 
 const disponibiliteElement = document.createElement("p")
 disponibiliteElement.innerText = article.disponibilite === true ? "En stock" : "Rupture de stock"
