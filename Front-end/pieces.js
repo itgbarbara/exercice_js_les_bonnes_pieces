@@ -78,3 +78,50 @@ boutonNoDescription.addEventListener("click", () => {
     })
     console.log(piecesFiltrees)
 })
+
+// Exctraction des noms de la liste de pièces
+const noms = pieces.map(piece => piece.nom)
+console.log(noms)
+for (let i=pieces.length-1; i>=0; i--) {
+    if(pieces[i].prix > 35) {
+        noms.splice(i,1)
+    }
+}
+
+// Création de la liste en html
+const abordablesElements = document.createElement("ul")
+// Ajout de chaque nom à la liste
+for (let i=0; i < noms.length; i++) {
+    const nomElement = document.createElement("li")
+    nomElement.innerText = noms[i]
+    abordablesElements.appendChild(nomElement)
+}
+
+// Ajout de l'entête puis de la liste au bloc résultats filtres
+document.querySelector(".abordables")
+    .appendChild(abordablesElements)
+
+//
+// Exercice //
+//
+const nomPrixDisponibles = pieces.map(piece => `${piece.nom} - ${piece.prix} €`)
+console.log(nomPrixDisponibles)
+for (let i=pieces.length-1; i>=0; i--) {
+    if (pieces[i].disponibilite === false) {
+        nomPrixDisponibles.splice(i,1)
+    }
+}
+
+// Création de la liste en html
+const disponiblesElements = document.createElement("ul")
+// Ajout de chaque nom à la liste
+for (let i=0; i < nomPrixDisponibles.length; i++) {
+    const nomElement = document.createElement("li")
+    nomElement.innerText = nomPrixDisponibles[i]
+    disponiblesElements.appendChild(nomElement)
+}
+
+// Ajout de l'entête puis de la liste au bloc résultats filtres
+document.querySelector(".disponibles")
+    .appendChild(disponiblesElements)
+
