@@ -22,20 +22,14 @@
 				<button class="btn-filtrer">Filtrer les pièces non abordables</button>
 				<br>
 				<button class="btn-nodesc">Filtrer les pièces sans description</button>
+				<br>
+				<label for="prix-max">Prix maximum :</label><br>
+				<input type="range" id="prix-max" name="prix-max" min="0" max="60" step="5">
 			</section>
 
 			<!-- Fiches produits -->
 			<section class="fiches">
-
-				<div class="abordables">
-					<p>Pièces abordables</p>
-					<!-- Liste éléments abodrables -->
-				</div>
-				<div class="disponibles">
-					<p>Pièces disponibles</p>
-					<!-- Liste éléments abodrables -->
-				</div>
-
+				<!-- Génération des fiches produits par pieces.js-->
 			</section>
 		</main>
 	</body>
