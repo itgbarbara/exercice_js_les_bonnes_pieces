@@ -1,49 +1,89 @@
-// Récupération des pièces depuis le fichier JSON
-const reponse = await fetch("pieces-autos.json")
-const pieces  = await reponse.json()
+// Import des fonctions du fichier avis.js
+import { ajoutListenersAvis, ajoutListenerEnvoyerAvis, afficherAvis } from "./avis.js"
+
+// Récupération des pièces éventuellement stockées dans le localStorage
+let pieces = window.localStorage.getItem("pieces")
+if (pieces === null) {
+    // Code de récupération des pièces depuis l'API HTTP
+    const reponse = await fetch("http://localhost:8081/pieces") // On envoie une requête pour récupérer les données du fichier pieces-auto.json
+    pieces = await reponse.json() // On désérialise le JSON et on stocke la liste d'objets obtenue dans la variable "pieces"
+
+    // Transformation des pièces en JSON pour les stocker dans le localStorage
+    const valeurPieces = JSON.stringify(pieces)
+
+    // Stockage des informations dans le localStorage
+    window.localStorage.setItem("pieces", valeurPieces)
+} else {
+    pieces = JSON.parse(pieces) // On reconstruit les données en mémoire
+}
 
 // Déclaration de la fonction qui génère tout le contenu de la section "Fiches"
 // Pour ne pas avoir à répérer le code de la boucle FOR à chaque fois qu'on regénère la page
 function genererPieces(pieces) {
     for (let i=0; i < pieces.length; i++) {
 
+        const article = pieces[i];
+
         // Création des balises et rattachement au DOM
 
         const fichePiece = document.createElement("article") //Création d'une balise <article> dédiée à une fiche pour une pièce auto
 
         const imagePiece = document.createElement("img") // On crée l'élément html image <img>
-        imagePiece.src = pieces[i].image //On accède à l'indice i de la liste de pièces pour configurer la source de l'image
+        imagePiece.src = article.image //On accède à l'indice i de la liste de pièces pour configurer la source de l'image
         fichePiece.appendChild(imagePiece) // On rattache l'image <img> à la balise <article>
 
         const nomPiece = document.createElement("h2") // On crée une balise html <h2> (titre 2)
-        nomPiece.innerText = pieces[i].nom // On y ajoute le nom de l'article
+        nomPiece.innerText = article.nom // On y ajoute le nom de l'article
         fichePiece.appendChild(nomPiece) // On rattache le titre <h2> à la balise <article>
 
         const prixPiece = document.createElement("p") // On crée une balise html <p> (paragraphe)
-        prixPiece.innerText = `Prix : ${pieces[i].prix} € (${pieces[i].prix < 35 ? "€" : "€€€"})` // On y ajoute une chaîne de caractères avec le prix de l'article
+        prixPiece.innerText = `Prix : ${article.prix} € (${article.prix < 35 ? "€" : "€€€"})` // On y ajoute une chaîne de caractères avec le prix de l'article
         fichePiece.appendChild(prixPiece) // On rattache le paragraphe <p> contenant le prix à la balise <article>
 
         const categoriePiece = document.createElement("p") // On crée une balise html <p> (paragraphe)
-        categoriePiece.innerText = pieces[i].categorie ?? "(aucune catégorie)" // On y ajoute la catégorie de l'article
+        categoriePiece.innerText = article.categorie ?? "(aucune catégorie)" // On y ajoute la catégorie de l'article
         fichePiece.appendChild(categoriePiece) // On rattache le paragraphe <p> contenant la catégorie à la balise <article>
 
         const descriptionPiece = document.createElement("p") // On crée une balise html <p> (paragraphe)
-        descriptionPiece.innerText = pieces[i].description ?? "Pas de description pour le moment" // On y ajoute la description de l'article*
+        descriptionPiece.innerText = article.description ?? "Pas de description pour le moment" // On y ajoute la description de l'article*
         fichePiece.appendChild(descriptionPiece) // On rattache le paragraphe <p> contenant la description à la balise <article>
     
         const disponibilitePiece = document.createElement("p")
-        disponibilitePiece.innerText = pieces[i].disponibilite === true ? "En stock" : "Rupture de stock"
+        disponibilitePiece.innerText = article.disponibilite === true ? "En stock" : "Rupture de stock"
         fichePiece.appendChild(disponibilitePiece) // On rattache le paragraphe <p> contenant la disponibilité à la balise <article>
+
+        const avisBouton = document.createElement("button"); // Création du boutons pour afficher les avis
+        avisBouton.dataset.id = article.id; // rattachement du bouton à la fiche produit correspondante
+
+        avisBouton.textContent = "Afficher les avis"; // Texte à l'intérieur du bouton
+        fichePiece.appendChild(avisBouton); // Rattachement du bouton au DOM (élément parent : fiche article)
+
 
         // Récupération de l'élément du DOM qui accueillera les fiches (parent)
         const sectionFiches = document.querySelector(".fiches") // On récupère la <section> de classe "Fiches"
         sectionFiches.appendChild(fichePiece) // On rattache la balise <article> créée au début à la <section> de classe "fiches"
 
     }
+
+    ajoutListenersAvis()
+    ajoutListenerEnvoyerAvis()
 }
 
 // Premier affichage de la page
 genererPieces(pieces)
+
+
+//
+for (let i=0; i < pieces.length; i++) {
+    const id = pieces[i].id
+    const avisJSON = window.localStorage.getItem(`avis-piece-${id}`)
+    const avis = JSON.parse(avisJSON) // On reconstruit les données en mémoire
+    
+    if (avis !== null) {
+        const fichePiece = document.querySelector(`article[data-id="${id}]`)
+        afficherAvis(fichePiece, avis)
+    }
+}
 
 
 // Gestion des boutons
@@ -99,6 +139,12 @@ inputPrixMax.addEventListener("input", () =>{
     const piecesFiltrees = pieces.filter(piece => piece.prix <= inputPrixMax.value)
     document.querySelector(".fiches").innerHTML = ""
     genererPieces(piecesFiltrees)
+})
+
+// Ajout du listener pour mettre à jour les données du localStorage
+const boutonMettreAJour = document.querySelector(".btn-maj")
+boutonMettreAJour.addEventListener("click", () => {
+    window.localStorage.removeItem("pieces")
 })
 
 
