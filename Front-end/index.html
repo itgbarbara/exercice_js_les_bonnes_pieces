@@ -5,6 +5,7 @@
 		<title>Les Bonnes Pièces</title>
 		<link rel="stylesheet" href="styles.css">
 		<script type="module" src="pieces.js"></script>
+		<script src="node_modules/chart.js/dist/chart.umd.js" defer></script>
 	</head>
 	<body>
 		<header>
@@ -25,6 +26,22 @@
 				<br>
 				<label for="prix-max">Prix maximum :</label><br>
 				<input type="range" id="prix-max" name="prix-max" min="0" max="60" step="5">
+				<h3>Ajouter un avis</h3>
+				<form class="formulaire-avis">
+					<label for="piece-id">Identifiant de la pièce :</label><br>
+					<input type="number" id="piece-id" name="piece-id"><br>
+					<label for="utilisateur">Nom d'utilisateur :</label><br>
+					<input type="text" id="utilisateur "name="utilisateur"><br>
+					<label for="avis">Avis</label><br>
+					<textarea id="commentaire" name="commentaire"></textarea><br>
+					<label for="nb-etoiles">Note :</label><br>
+					<input type="number" id="nb-etoiles" name="nb-etoiles" min="0" max="5">
+					<button>Envoyer</button><br>
+				</form>
+				<h3>Données</h3>
+				<button class="btn-maj">Mettre à jour les pièces</button>
+				<h3>Aperçu des avis</h3>*
+				<canvas id="graphique-avis" width="300" height="300"></canvas>
 			</section>
 
 			<!-- Fiches produits -->
