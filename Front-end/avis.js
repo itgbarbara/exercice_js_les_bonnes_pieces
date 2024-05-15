@@ -32,10 +32,10 @@ export function ajoutListenerEnvoyerAvis() {
 
         // Création de l'objet du nouvel avis
         const avis = { // Création d'un objet reprennant les champs du formulaire et crée une propriété pour chacun d'entre eux
-            pieceId: parseInt(event.target.querySelector("[name=piece-id]").value), // on sélectionne la valeur choisie dans le champ ID
+            pieceId: parseInt(event.target.querySelector("[name=piece-id]").value), // on sélectionne la valeur choisie dans le champ ID et on la convertit en nombre entier
             utilisateur: event.target.querySelector("[name=utilisateur]").value, // On séléctionne la valeur tapée dans le champ utilisateur
             commentaire: event.target.querySelector("[name=commentaire]").value, // On sélectionne le commentaire tapé dans le champ textarea
-            nbEtoiles: parseInt(event.target.querySelector("[name=nb-etoiles]").value)
+            nbEtoiles: parseInt(event.target.querySelector("[name=nb-etoiles]").value) // On sélectionne le nombre d'éoile et on le convertit en nombre entier
         }
 
         // Création de la charge utile contenant l'objet au format JSON
